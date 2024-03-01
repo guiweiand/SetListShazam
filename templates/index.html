@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Processador de URL</title>
+</head>
+<body>
+    <h1>Processador de URL</h1>
+    <form action="/process_url" method="post">
+        <input type="text" name="url" placeholder="Digite o URL">
+        <button type="submit">Processar</button>
+    </form>
+    {% if url %}
+        <h2>Resultado</h2>
+        <p>{{ url }}</p>
+        <p>{{ string_retornada }}</p>
+    {% endif %}
+</body>
+</html>

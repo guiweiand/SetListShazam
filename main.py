@@ -10,7 +10,7 @@ sleep_time = 5 #s
 setlist = SetList(URL=video_url, filename=filename)
 
 # Download Yt video
-#video_info = setlist.download_audio_from_youtube()
+video_info = setlist.download_audio_from_youtube()
 
 # Chunk audio
 chunk_names = setlist.chunk_audio()

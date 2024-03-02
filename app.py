@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from main import run
 
 app = Flask(__name__)
 
@@ -9,9 +10,8 @@ def index():
 @app.route("/process_url", methods=["POST"])
 def process_url():
     url = request.form["url"]
-    # Seu script Python para processar o URL
-    string_retornada = "Sua string retornada"
-    return render_template("index.html", url=url, string_retornada=string_retornada)
+    setlist_string = run(URL=url)
+    return render_template("index.html", url=url, setlist=setlist_string)
 
 if __name__ == "__main__":
     app.run(debug=True)

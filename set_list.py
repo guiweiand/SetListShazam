@@ -177,6 +177,9 @@ class SetList:
         return setlist
 
     def print_setlist(self, setlist):
+        setlist_ts = ''
         print()
         for timestamp_info in setlist:
             print(timestamp_info)
+            setlist_ts += timestamp_info + '\n'
+        return setlist_ts

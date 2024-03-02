@@ -101,8 +101,10 @@ class SetList:
 
         for name in chunk_names:
             try:
-                loop = asyncio.get_event_loop()
-                results[name] = loop.run_until_complete(main(name))
+                #loop = asyncio.get_event_loop()
+                asyncio.set_event_loop(asyncio.SelectorEventLoop())
+                results[name] = asyncio.get_event_loop().run_until_complete(main(name))
+                #results[name] = loop.run_until_complete(main(name))
                 print('getting song data from chunk {name}'.format(name=name))
             except Exception as e:
                 print(f'got error in chunk {name}: {e}')

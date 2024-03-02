@@ -18,11 +18,12 @@ class SetList:
     Initializes the generator with URL attribute.
     output_folder, filename and chunk_length are optional attributes.
     """
-    def __init__(self, URL, output_folder="", filename="filename", chunk_length=1000*30):
+    def __init__(self, URL, output_folder="", filename="filename", chunk_length=1000*30, sleep_time=5):
         self.URL = URL
         self.output_folder = output_folder
         self.filename = filename
         self.chunk_length = chunk_length
+        self.sleep_time = sleep_time
 
     def seconds_to_hms(self, total_seconds):
         # Calculate hours, minutes, and remaining seconds
@@ -106,7 +107,7 @@ class SetList:
             except Exception as e:
                 print(f'got error in chunk {name}: {e}')
                 results[name] = f'Error!!! {e}'
-            time.sleep(5)
+            time.sleep(self.sleep_time)
         return results
 
     def setlist_intelligence(self, results):

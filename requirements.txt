@@ -10,6 +10,7 @@ colorama==0.4.6
 dataclass-factory==2.16
 Flask==3.0.2
 frozenlist==1.4.1
+gunicorn==21.2.0
 idna==3.6
 iniconfig==2.0.0
 itsdangerous==2.1.2

@@ -92,7 +92,7 @@ class SetList:
         # get data for all the exports
         async def main(file_name):
             shazam = Shazam()
-            out = await shazam.recognize_song(file_name)
+            out = await shazam.recognize(file_name)
             #print(json.dumps(out, indent=4))
             #print(out)
             return out

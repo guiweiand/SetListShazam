@@ -19,7 +19,7 @@ def run(URL, output_folder="", filename="filename", chunk_length=1000*30, sleep_
 
     # Discover Songs
     results = setlist.get_shazam_data(chunk_names)
-    print(results)
+    #print(results)
     # Setlist Intelligence
     setlist_results = setlist.setlist_intelligence(results)
 

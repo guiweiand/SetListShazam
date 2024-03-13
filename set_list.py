@@ -8,6 +8,8 @@ from pydub.utils import make_chunks
 import asyncio
 from shazamio import Shazam
 import time
+import subprocess
+import glob
 
 """
 This class represents a music setlist generator.
@@ -56,7 +58,7 @@ class SetList:
             # Download the audio stream to the specified output path
             audio_stream.download(self.output_folder, filename=self.filename)
 
-            print(f"Audio downloaded successfully")
+            print(f"Audio downloaded successfully: {self.filename}")
 
             return {'video_title': video_title, 'video_author': video_author, 'video_length': video_length}
 
@@ -65,19 +67,25 @@ class SetList:
             quit()
 
     # Chunk the audio
-    def chunk_audio(self):
-        print(self.filename)
-        myaudio = AudioSegment.from_file(self.filename)
-        chunks = make_chunks(myaudio, self.chunk_length)
+    def chunk_audio(self):        
+        # calls ffmpeg to chunk audio
+        subprocess.run([
+            "ffmpeg", 
+            "-i", 
+            f"{self.filename}", 
+            "-c", 
+            "copy", 
+            "-map", 
+            "0", 
+            "-segment_time", 
+            f"{self.chunk_length/1000}", 
+            "-f", 
+            "segment", 
+            "chunk%03d.mp4"
+        ])
 
-        #Export all of the individual chunks
-        chunk_names = list()
-        for i, chunk in enumerate(chunks):
-            chunk_name = "chunk{0}.mp4".format(i)
-            chunk_names.append(chunk_name)
-            print("exporting", chunk_name)
-            chunk.export(chunk_name)
-        return chunk_names
+        # Return the chunk names created
+        return glob.glob("chunk*")
 
     # Get chunk data from Shazam (Operational)
     def get_shazam_data(self, chunk_names):
@@ -119,16 +127,20 @@ class SetList:
         title_exists = 0
         for i in range(len(results)):
             # gets chunk's track names
-            if str(results['chunk{i}.mp4'.format(i=i)]).startswith('Error') or 'track' not in results['chunk{i}.mp4'.format(i=i)] or 'title' not in results['chunk{i}.mp4'.format(i=i)]['track']:
+            if str(results['chunk{i:03d}.mp4'.format(i=i)]).startswith('Error') or \
+                    'track' not in results['chunk{i:03d}.mp4'.format(i=i)] or \
+                    'title' not in results['chunk{i:03d}.mp4'.format(i=i)]['track']:
                 track_name = ''
             else:
-                track_name = results['chunk{i}.mp4'.format(i=i)]['track']['title']
+                track_name = results['chunk{i:03d}.mp4'.format(i=i)]['track']['title']
                 title_exists = 1
             # gets chunk's track author
-            if str(results['chunk{i}.mp4'.format(i=i)]).startswith('Error') or 'track' not in results['chunk{i}.mp4'.format(i=i)] or 'subtitle' not in results['chunk{i}.mp4'.format(i=i)]['track']:
+            if str(results['chunk{i:03d}.mp4'.format(i=i)]).startswith('Error') or \
+                    'track' not in results['chunk{i:03d}.mp4'.format(i=i)] or \
+                    'subtitle' not in results['chunk{i:03d}.mp4'.format(i=i)]['track']:
                 track_author = ''
             else:
-                track_author = results['chunk{i}.mp4'.format(i=i)]['track']['subtitle']
+                track_author = results['chunk{i:03d}.mp4'.format(i=i)]['track']['subtitle']
 
             track_info.append({'name': track_name, 'author': track_author})
 

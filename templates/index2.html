@@ -9,12 +9,14 @@
 <body>
     <header>
         <h1>YouTube SetList Generator</h1>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     </header>
     <main>
         <form action="/process_url" method="post">
             <input type="url" name="url" id="url" placeholder="Insert YouTube setlist URL">
-            <button type="submit">Generate SetList</button>
+            <button type="submit" onclick="$('#loading').show();">Generate SetList</button>
         </form>
+        <div id="loading" style="display:none; text-align:center;"><img src="\static\Loading_icon.gif" alt="" />Loading!</div>
         <p>
             Please wait, it may take a while. Videos with duration of 1h30 may take 20min to have its SetList generated.
         </p>
